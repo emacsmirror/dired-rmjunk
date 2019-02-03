@@ -1,4 +1,4 @@
-;;; dired-rmshit.el --- A port of Jakub Klinkovský's rmshit.py to Dired.
+;;; dired-rmshit.el --- A port of Jakub Klinkovský's rmshit.py to Dired. -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019 Jakob L. Kreuze
 
