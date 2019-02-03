@@ -5,7 +5,7 @@
 ;; Author: Jakob L. Kreuze <zerodaysfordays@sdf.lonestar.org>
 ;; Version: 1.0
 ;; Package-Requires (dired)
-;; Keywords: dired
+;; Keywords: files matching
 ;; URL: https://git.sr.ht/~jakob/dired-rmshit
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -53,7 +53,8 @@
 
 ;;;###autoload
 (defun dired-rmshit ()
-  "Marks all files in the current dired buffer that match one of
+  "Mark all shitty files in the current dired buffer.
+'Shitty' is defined to be any file with a name matching one of
 the patterns in `dired-rmshit-shitty-files'."
   (interactive)
   (when (eq major-mode 'dired-mode)
