@@ -51,6 +51,7 @@
   "Default list of files to remove. Current as of f707d92."
   :type '(list string))
 
+;;;###autoload
 (defun dired-rmshit ()
   "Marks all files in the current dired buffer that match one of
 the patterns in `dired-rmshit-shitty-files'."
