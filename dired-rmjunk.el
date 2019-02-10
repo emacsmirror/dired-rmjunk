@@ -61,10 +61,11 @@ patterns in `dired-rmjunk-patterns'."
     (save-excursion
       (let ((files-marked-count 0))
         (dolist (file (directory-files dired-directory))
-          (when (member file dired-rmjunk-shitty-files)
-            (setq files-marked-count (1+ files-marked-count))
-            (dired-goto-file (concat (expand-file-name dired-directory) file))
-            (dired-flag-file-deletion 1)))
+          (dolist (pattern dired-rmjunk-patterns)
+            (when (string-match pattern file)
+              (setq files-marked-count (1+ files-marked-count))
+              (dired-goto-file (concat (expand-file-name dired-directory) file))
+              (dired-flag-file-deletion 1))))
         (message (if (zerop files-marked-count)
                      "No junk files found :)"
                    "Junk files marked."))))))
