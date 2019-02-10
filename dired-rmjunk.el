@@ -26,7 +26,7 @@
 ;; dired-rmjunk is a port of Jakub Klinkovský's home directory cleanup tool to
 ;; Dired. The interactive function, `dired-rmjunk' will mark all files in the
 ;; current Dired buffer that match one of the patterns specified in
-;; `dired-rmjunk-shitty-files'. The tool is intended as a simple means for
+;; `dired-rmjunk-patterns'. The tool is intended as a simple means for
 ;; keeping one's home directory tidy -- removing "junk" dotfiles.
 
 ;; The script that this is based on can be found at:
@@ -35,10 +35,10 @@
 ;;; Code:
 
 (defgroup dired-rmjunk ()
-  "Remove shitty files with dired."
+  "Remove junk files with dired."
   :group 'dired)
 
-(defcustom dired-rmjunk-shitty-files
+(defcustom dired-rmjunk-patterns
   '(".adobe" ".macromedia" ".recently-used"
     ".local/share/recently-used.xbel" "Desktop" ".thumbnails" ".gconfd"
     ".gconf" ".local/share/gegl-0.2" ".FRD/log/app.log" ".FRD/links.txt"
@@ -53,9 +53,9 @@
 
 ;;;###autoload
 (defun dired-rmjunk ()
-  "Mark all shitty files in the current dired buffer.
-'Shitty' is defined to be any file with a name matching one of
-the patterns in `dired-rmjunk-shitty-files'."
+  "Mark all junk files in the current dired buffer.
+'Junk' is defined to be any file with a name matching one of the
+patterns in `dired-rmjunk-patterns'."
   (interactive)
   (when (eq major-mode 'dired-mode)
     (save-excursion
@@ -66,8 +66,8 @@ the patterns in `dired-rmjunk-shitty-files'."
             (dired-goto-file (concat (expand-file-name dired-directory) file))
             (dired-flag-file-deletion 1)))
         (message (if (zerop files-marked-count)
-                     "No shitty files found :)"
-                   "Shitty files marked."))))))
+                     "No junk files found :)"
+                   "Junk files marked."))))))
 
 (provide 'dired-rmjunk)
 ;;; dired-rmjunk.el ends here
