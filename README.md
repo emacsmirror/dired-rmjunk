@@ -1,10 +1,10 @@
-# dired-rmshit
+# dired-rmjunk
 
-dired-rmshit is a port of Jakub Klinkovský's rmshit.py to Dired. The interactive
-function, `dired-rmshit` will mark all files in the current Dired buffer that
-match one of the patterns specified in `dired-rmshit-shitty-files`. The tool is
-intended as a simple means for keeping one's home directory tidy -- removing
-"junk" dotfiles.
+dired-rmjunk is a port of Jakub Klinkovský's home directory cleanup tool to
+Dired. The interactive function, `dired-rmjunk` will mark all files in the
+current Dired buffer that match one of the patterns specified in
+`dired-rmjunk-shitty-files`. The tool is intended as a simple means for keeping
+one's home directory tidy -- removing "junk" dotfiles.
 
-The original implementation of rmshit.py can be found at:
+The script that this is based on can be found at:
 <https://github.com/lahwaacz/Scripts/blob/master/rmshit.py>

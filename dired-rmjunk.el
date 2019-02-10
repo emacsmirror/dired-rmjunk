@@ -1,4 +1,4 @@
-;;; dired-rmshit.el --- A port of Jakub Klinkovský's rmshit.py to Dired. -*- lexical-binding: t; -*-
+;;; dired-rmjunk.el --- A home directory cleanup utility for Dired. -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019 Jakob L. Kreuze
 
@@ -6,7 +6,7 @@
 ;; Version: 1.0
 ;; Package-Requires (dired)
 ;; Keywords: files matching
-;; URL: https://git.sr.ht/~jakob/dired-rmshit
+;; URL: https://git.sr.ht/~jakob/dired-rmjunk
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,22 +23,22 @@
 
 ;;; Commentary:
 
-;; dired-rmshit is a port of Jakub Klinkovský's rmshit.py to Dired. The
-;; interactive function, `dired-rmshit' will mark all files in the
+;; dired-rmjunk is a port of Jakub Klinkovský's home directory cleanup tool to
+;; Dired. The interactive function, `dired-rmjunk' will mark all files in the
 ;; current Dired buffer that match one of the patterns specified in
-;; `dired-rmshit-shitty-files'. The tool is intended as a simple means
-;; for keeping one's home directory tidy -- removing "junk" dotfiles.
+;; `dired-rmjunk-shitty-files'. The tool is intended as a simple means for
+;; keeping one's home directory tidy -- removing "junk" dotfiles.
 
-;; The original implementation of rmshit.py can be found at:
+;; The script that this is based on can be found at:
 ;; <https://github.com/lahwaacz/Scripts/blob/master/rmshit.py>
 
 ;;; Code:
 
-(defgroup dired-rmshit ()
+(defgroup dired-rmjunk ()
   "Remove shitty files with dired."
   :group 'dired)
 
-(defcustom dired-rmshit-shitty-files
+(defcustom dired-rmjunk-shitty-files
   '(".adobe" ".macromedia" ".recently-used"
     ".local/share/recently-used.xbel" "Desktop" ".thumbnails" ".gconfd"
     ".gconf" ".local/share/gegl-0.2" ".FRD/log/app.log" ".FRD/links.txt"
@@ -52,16 +52,16 @@
   :type '(list string))
 
 ;;;###autoload
-(defun dired-rmshit ()
+(defun dired-rmjunk ()
   "Mark all shitty files in the current dired buffer.
 'Shitty' is defined to be any file with a name matching one of
-the patterns in `dired-rmshit-shitty-files'."
+the patterns in `dired-rmjunk-shitty-files'."
   (interactive)
   (when (eq major-mode 'dired-mode)
     (save-excursion
       (let ((files-marked-count 0))
         (dolist (file (directory-files dired-directory))
-          (when (member file dired-rmshit-shitty-files)
+          (when (member file dired-rmjunk-shitty-files)
             (setq files-marked-count (1+ files-marked-count))
             (dired-goto-file (concat (expand-file-name dired-directory) file))
             (dired-flag-file-deletion 1)))
@@ -69,5 +69,5 @@ the patterns in `dired-rmshit-shitty-files'."
                      "No shitty files found :)"
                    "Shitty files marked."))))))
 
-(provide 'dired-rmshit)
-;;; dired-rmshit.el ends here
+(provide 'dired-rmjunk)
+;;; dired-rmjunk.el ends here
