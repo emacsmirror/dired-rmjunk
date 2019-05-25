@@ -77,6 +77,14 @@ does not contain a directory component."
     (if split-offset
         (cl-subseq path 0 (1+ split-offset)))))
 
+(ert-deftest dired-rmjunk-test-dir-name ()
+  (should (equal (dired-rmjunk--dir-name ".FRD/links.txt")
+                 ".FRD/"))
+  (should (equal (dired-rmjunk--dir-name ".local/share/recently-used.xbel")
+                 ".local/share/"))
+  (should (equal (dired-rmjunk--dir-name ".asy")
+                 nil)))
+
 (defun dired-rmjunk--file-name (path)
   "Return the file-name portion of PATH."
   (let ((split-offset (cl-position ?\/ path :from-end t)))
@@ -84,6 +92,14 @@ does not contain a directory component."
         (cl-subseq path (1+ split-offset))
       ;; If there's no directory component, `path' IS the file-name!
       path)))
+
+(ert-deftest dired-rmjunk-test-file-name ()
+  (should (equal (dired-rmjunk--file-name ".FRD/links.txt")
+                 "links.txt"))
+  (should (equal (dired-rmjunk--file-name ".local/share/recently-used.xbel")
+                 "recently-used.xbel"))
+  (should (equal (dired-rmjunk--file-name ".asy")
+                 ".asy")))
 
 (provide 'dired-rmjunk)
 ;;; dired-rmjunk.el ends here
