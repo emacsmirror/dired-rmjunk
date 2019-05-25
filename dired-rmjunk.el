@@ -3,7 +3,7 @@
 ;; Copyright (C) 2019 Jakob L. Kreuze
 
 ;; Author: Jakob L. Kreuze <zerodaysfordays@sdf.lonestar.org>
-;; Version: 1.0
+;; Version: 1.1
 ;; Package-Requires (cl-lib dired)
 ;; Keywords: files matching
 ;; URL: https://git.sr.ht/~jakob/dired-rmjunk
