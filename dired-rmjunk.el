@@ -55,7 +55,16 @@
 (defun dired-rmjunk ()
   "Mark all junk files in the current dired buffer.
 'Junk' is defined to be any file with a name matching one of the
-patterns in `dired-rmjunk-patterns'."
+patterns in `dired-rmjunk-patterns'. A pattern is said to match
+under the following conditions:
+
+  1. If the pattern lacks a directory component, matching means
+  that the regexp specified by the pattern matches the file-name.
+  2. If the pattern lacks a directory component, matching means
+  that that the regexp specified by the file-name component of
+  the pattern matches the file-name, AND the regexp specified by
+  the directory component of the pattern matches the current
+  directory."
   (interactive)
   (when (eq major-mode 'dired-mode)
     (save-excursion
