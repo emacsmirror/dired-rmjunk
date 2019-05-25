@@ -4,7 +4,7 @@
 
 ;; Author: Jakob L. Kreuze <zerodaysfordays@sdf.lonestar.org>
 ;; Version: 1.0
-;; Package-Requires (dired)
+;; Package-Requires (cl-lib dired)
 ;; Keywords: files matching
 ;; URL: https://git.sr.ht/~jakob/dired-rmjunk
 
@@ -69,6 +69,21 @@ patterns in `dired-rmjunk-patterns'."
         (message (if (zerop files-marked-count)
                      "No junk files found :)"
                    "Junk files marked."))))))
+
+(defun dired-rmjunk--dir-name (path)
+  "Return the directory portion of PATH, or `nil' if the path
+does not contain a directory component."
+  (let ((split-offset (cl-position ?\/ path :from-end t)))
+    (if split-offset
+        (cl-subseq path 0 (1+ split-offset)))))
+
+(defun dired-rmjunk--file-name (path)
+  "Return the file-name portion of PATH."
+  (let ((split-offset (cl-position ?\/ path :from-end t)))
+    (if split-offset
+        (cl-subseq path (1+ split-offset))
+      ;; If there's no directory component, `path' IS the file-name!
+      path)))
 
 (provide 'dired-rmjunk)
 ;;; dired-rmjunk.el ends here
