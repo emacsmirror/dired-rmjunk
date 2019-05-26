@@ -115,5 +115,29 @@ does not contain a directory component."
   (should (equal (dired-rmjunk--file-name ".asy")
                  ".asy")))
 
+(defun dired-rmjunk--directories-in-patterns (&optional patterns)
+  (let ((patterns (or patterns dired-rmjunk-patterns)))
+    (cl-remove-duplicates
+     (cl-remove-if #'null
+                   (map 'list #'dired-rmjunk--dir-name patterns))
+     :test #'string=)))
+
+(ert-deftest dired-rmjunk-test-directories-in-patterns ()
+  (should (equal (dired-rmjunk--directories-in-patterns
+                  '(".local/share/recently-used.xbel"
+                    "Desktop"
+                    ".thumbnails"))
+                 '(".local/share/")))
+  (should (equal (dired-rmjunk--directories-in-patterns
+                  '(".distlib"
+                    ".bazaar"
+                    ".bzr.log"))
+                 nil))
+  (should (equal (dired-rmjunk--directories-in-patterns
+                  '(".local/share/gegl-0.2"
+                    ".FRD/app.log"
+                    ".FRD/links.txt"))
+                 '(".local/share/" ".FRD/"))))
+
 (provide 'dired-rmjunk)
 ;;; dired-rmjunk.el ends here
