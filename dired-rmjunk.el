@@ -51,6 +51,13 @@
   "Default list of files to remove. Current as of f707d92."
   :type '(list string))
 
+(defvar dired-rmjunk--responsible-for-last-mark nil
+  "Whether or not `dired-rmjunk' was responsible for any of the
+current dired marks.")
+
+(defvar dired-rmjunk--visit-queue nil
+  "Queue of directories to visit following a removal.")
+
 ;;;###autoload
 (defun dired-rmjunk ()
   "Mark all junk files in the current dired buffer.
@@ -80,9 +87,38 @@ under the following conditions:
               (setq files-marked-count (1+ files-marked-count))
               (dired-goto-file (concat (expand-file-name dired-directory) file))
               (dired-flag-file-deletion 1))))
-        (message (if (zerop files-marked-count)
-                     "No junk files found :)"
-                   "Junk files marked."))))))
+        (if (zerop files-marked-count)
+            (message "No junk files found :)")
+          (progn
+            (message "Junk files marked.")
+            (setq dired-rmjunk--responsible-for-last-mark t)))
+        files-marked-count))))
+
+(advice-add #'dired-do-flagged-delete :after #'dired-rmjunk--after-delete)
+
+(defun dired-rmjunk--after-delete ()
+  ;; Prompt the user for whether or not they want to visit the subdirectories
+  ;; named in dired-rmjunk-patterns.
+  (when (and (not dired-rmjunk--visit-queue)
+             dired-rmjunk--responsible-for-last-mark)
+    (let* ((to-visit (map 'list
+                          #'(lambda (subdir) (concat (dired-current-directory) "/" subdir))
+                          (dired-rmjunk--directories-in-patterns)))
+           (to-visit (cl-remove-if-not #'file-exists-p to-visit)))
+      (when (and to-visit
+                 (y-or-n-p "Visit subdirectories?"))
+        (setq dired-rmjunk--visit-queue to-visit))))
+
+  ;; Visit the next subdirectory in the queue.
+  (when dired-rmjunk--visit-queue
+    (while (and dired-rmjunk--visit-queue
+                (set-buffer (dired (first dired-rmjunk--visit-queue)))
+                (message "Visiting %s..." (first dired-rmjunk--visit-queue))
+                (zerop (dired-rmjunk)))
+      (setq dired-rmjunk--visit-queue
+            (rest dired-rmjunk--visit-queue))))
+
+  (setq dired-rmjunk--responsible-for-last-mark nil))
 
 (defun dired-rmjunk--dir-name (path)
   "Return the directory portion of PATH, or `nil' if the path
